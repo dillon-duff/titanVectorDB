@@ -65,10 +65,30 @@ class VectorSearch:
         return results
 
 if __name__ == "__main__":
-    # Example usage
+    with open('data/vectors/DistrictPortal/vectors.json', 'r') as f:
+        district_portal_vectors = json.load(f)
+    with open('data/vectors/POS/vectors.json', 'r') as f:
+        pos_vectors = json.load(f)
+    
+    combined_vectors = {**district_portal_vectors, **pos_vectors}
+    
+    with open('data/vectors/combined_vectors.json', 'w') as f:
+        json.dump(combined_vectors, f)
+    
+    searcher = VectorSearch(vectors_path='data/vectors/combined_vectors.json')
+    searcher.build_index()
+    searcher.save_index('data/vectors/combined_index.faiss')
+    
+    # Create separate indices as before
     searcher = VectorSearch(vectors_path='data/vectors/DistrictPortal/vectors.json')
     searcher.build_index()
     searcher.save_index('data/vectors/DistrictPortal/index.faiss')
+    
+    searcher = VectorSearch(vectors_path='data/vectors/POS/vectors.json')
+    searcher.build_index()
+    searcher.save_index('data/vectors/POS/index.faiss')
+
+    
 
     query = "How to void a transaction for a student"
     results = searcher.search(query, top_k=10)

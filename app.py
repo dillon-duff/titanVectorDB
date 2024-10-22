@@ -16,7 +16,6 @@ def ask():
     
     try:
         response = qa_system(question)
-        print(f"Response: {response}")
         return jsonify(response)
     except Exception as e:
         return jsonify({'error': str(e)}), 500

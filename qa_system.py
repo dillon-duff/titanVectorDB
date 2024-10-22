@@ -1,18 +1,24 @@
-from search_vectors import VectorSearch
+from build_search_vectors import VectorSearch
 import json
 from typing import Callable, Dict, Any
 import os
 from openai import OpenAI
 
 searcher = VectorSearch()
-searcher.load_vectors("data/vectors/DistrictPortal/vectors.json")
-searcher.load_index("data/vectors/DistrictPortal/index.faiss")
+searcher.load_vectors("data/vectors/combined_vectors.json")
+searcher.load_index("data/vectors/combined_index.faiss")
 
+district_portal_data = {}
+pos_data = {}
+
+with open("data/clean/DistrictPortal/data.json", "r") as f:
+    district_portal_data = json.load(f)
+with open("data/clean/POS/data.json", "r") as f:
+    pos_data = json.load(f)
 
 def get_page_content(url):
-    with open("data/clean/DistrictPortal/data.json", "r") as f:
-        data = json.load(f)
-    return data.get(url, "Content not found")
+    content = district_portal_data.get(url) or pos_data.get(url)
+    return content if content else "Content not found"
 
 
 class QAModel:
@@ -26,7 +32,7 @@ class QAModel:
 def openai_model(
     question: str, context: str, contexts_url_dict: Dict[int, str]
 ) -> Dict[str, Any]:
-    api_key = os.environ.get("OPENAI_API_KEY")
+    api_key = os.environ.get("OPENAI_SBA_KEY")
     if not api_key:
         raise ValueError("OPENAI_API_KEY not found in environment variables")
 
@@ -50,7 +56,6 @@ def openai_model(
             ],
         )
         resp = response.choices[0].message.content
-        print(contexts_url_dict)
         for i in range(10):
             ref = f"{{{i}}}"
             if ref in resp and i < len(contexts_url_dict):
