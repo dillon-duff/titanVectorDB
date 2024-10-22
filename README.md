@@ -38,7 +38,7 @@ Click the image above to watch a demonstration of the Titan Vector DB in action
                                            # set OPENAI_API_KEY=your_api_key_here
    ```
 
-# Step
+# Steps to build from scratch (run `python app.py` to run webapp with existing data)
 1. Scrape the tech support webpages and gather all of the links in data/raw for each of DistrictPortal and POS
    - Run `python scrape_tech_support.py`
 2. Extract the content from each of the links and store in data/clean for each of DistrictPortal and POS
