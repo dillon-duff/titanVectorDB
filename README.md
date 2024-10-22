@@ -1,6 +1,14 @@
 # Project Summary
 This project implements an advanced Question Answering (QA) system for Titan's tech support webpages. It uses NLP and vector search to provide context-aware responses to user queries. The system scrapes tech support content, processes it into a vector database, and uses this to power a Flask-based web application that can understand and respond to user questions in natural language.
 
+
+# Demo Video
+[![Titan Vector DB Demo](https://img.youtube.com/vi/cAV07CbMPpY/0.jpg)](https://www.youtube.com/watch?v=cAV07CbMPpY)
+
+Click the image above to watch a demonstration of the Titan Vector DB in action
+
+
+
 # Directory Structure
 - data/raw: Contains scraped links from tech support webpages
 - data/clean: Stores processed and cleaned textual content
