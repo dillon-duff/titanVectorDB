@@ -34,7 +34,7 @@ def openai_model(
 
     try:
         response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini-2024-07-18",
             messages=[
                 {
                     "role": "system",
