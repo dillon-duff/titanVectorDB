@@ -71,7 +71,7 @@ if __name__ == "__main__":
     searcher.save_index('data/vectors/DistrictPortal/index.faiss')
 
     query = "How to void a transaction for a student"
-    results = searcher.search(query)
+    results = searcher.search(query, top_k=10)
     print("Top search results:")
     for res in results:
         print(res)

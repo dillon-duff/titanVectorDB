@@ -93,7 +93,7 @@
             div.className = `message ${sender}-message`;
             
             // Convert markdown-style links to HTML links and headings to bold
-            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+            const linkRegex = /\[(\d+)\]\[([^\]]+)\]/g;
             const boldRegex = /\*\*([^*]+)\*\*/g;
             const textWithLinks = text
                 .replace(linkRegex, '<a href="$2" target="_blank">$1</a>')

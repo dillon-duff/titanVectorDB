@@ -15,5 +15,5 @@ This project is meant to build a vector database for the purpose of building a n
 - Run vectorize_data.py
 4. Build the vector database with FAISS
 - Run search_vectors.py
-
-
+5. Run the Flask app to host the QA system
+- Run app.py

@@ -24,7 +24,7 @@ class QAModel:
 
 
 def openai_model(
-    question: str, context: str, contexts_dict: Dict[int, str]
+    question: str, context: str, contexts_url_dict: Dict[int, str]
 ) -> Dict[str, Any]:
     api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
@@ -45,15 +45,19 @@ def openai_model(
                 },
                 {
                     "role": "user",
-                    "content": f"Given the context: {context}\n\nAnswer this question by citing sources: {question}",
+                    "content": f"Given the context: {context}\n\nAnswer this question with bullet points, each bullet point must contain a numbered reference: {question}",
                 },
             ],
         )
         resp = response.choices[0].message.content
+        print(contexts_url_dict)
         for i in range(10):
             ref = f"{{{i}}}"
-            if ref in resp and i < len(contexts_dict):
-                resp = resp.replace(ref, f"[{i+1}]({contexts_dict[i]})")
+            if ref in resp and i < len(contexts_url_dict):
+                url = contexts_url_dict[i]
+                # Replace (+) with %2B in URLs before creating markdown link
+                url = url.replace("(+)", "(%2B)")
+                resp = resp.replace(ref, f"[{i}][{url}]")
         return {"answer": resp}
     except Exception as e:
         return {"error": str(e)}
@@ -68,15 +72,15 @@ def qa_system(question: str, top_k: int = 5):
 
     results = searcher.search(question, top_k=top_k)
 
-    numbered_results = {i + 1: res["url"] for i, res in enumerate(results)}
+    numbered_results = {i: res["url"] for i, res in enumerate(results)}
 
     contexts = [f"[{i}] {get_page_content(url)}" for i, url in numbered_results.items()]
 
-    contexts_dict = {i: url for i, url in numbered_results.items()}
+    contexts_url_dict = {i: url for i, url in numbered_results.items()}
 
-    combined_context = " ".join(contexts)
+    combined_context = "\n--------------------------\n ".join(contexts)
 
-    answer = qa_model.generate_answer(question, combined_context, contexts_dict)
+    answer = qa_model.generate_answer(question, combined_context, contexts_url_dict)
 
     return answer
 
