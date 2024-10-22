@@ -32,7 +32,7 @@ class QAModel:
 def openai_model(
     question: str, context: str, contexts_url_dict: Dict[int, str]
 ) -> Dict[str, Any]:
-    api_key = os.environ.get("OPENAI_SBA_KEY")
+    api_key = os.environ.get("OPENAI_API_KEY")
     if not api_key:
         raise ValueError("OPENAI_API_KEY not found in environment variables")
 
